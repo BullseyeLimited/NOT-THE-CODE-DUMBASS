@@ -36,9 +36,14 @@ jobs:
           file: ./Dockerfile
           target: base
           push: true
+          provenance: false
+          sbom: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             ghcr.io/bullseyelimited/aigf-comfyui-worker:krea-0.26.2
             ghcr.io/bullseyelimited/aigf-comfyui-worker:latest
           build-args: |
             BASE_IMAGE=nvidia/cuda:12.8.1-cudnn-runtime-ubuntu24.04
             COMFYUI_VERSION=0.26.2
+            CUDA_VERSION_FOR_COMFY=12.8

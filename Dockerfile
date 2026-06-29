@@ -80,13 +80,7 @@ RUN uv pip install -r /comfyui/requirements.txt \
     && for r in /comfyui/custom_nodes/*/requirements.txt; do \
          [ -f "$r" ] && uv pip install -r "$r" || true; \
        done \
-    && uv pip install "transformers>=4.50.3,<5" "huggingface-hub<1.0"
-
-# AIGF: force cu128 PyTorch LAST (after requirements, so nothing downgrades it).
-# cu128 wheels carry kernels for Ada/Ampere/Blackwell, so start.sh's GPU pre-flight
-# passes on whatever GPU RunPod assigns — this is what fixes the exit-1 boot crash.
-RUN uv pip install --force-reinstall torch torchvision torchaudio \
-      --index-url https://download.pytorch.org/whl/cu128 \
+    && uv pip install "transformers>=4.50.3,<5" "huggingface-hub<1.0" \
     && python -c "import torch; print('torch', torch.__version__, 'cuda', torch.version.cuda)"
 
 # Build-time smoke test: actually start ComfyUI (imports the full node graph) so
