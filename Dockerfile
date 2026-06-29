@@ -62,6 +62,14 @@ RUN if [ "$ENABLE_PYTORCH_UPGRADE" = "true" ]; then \
       uv pip install --force-reinstall torch torchvision torchaudio --index-url ${PYTORCH_INDEX_URL}; \
     fi
 
+# AIGF: bake in the custom nodes our tuned Krea2 workflows depend on. Done BEFORE
+# the requirements + smoke-test steps below so (a) their requirements.txt deps get
+# installed by the loop and (b) the build-time smoke test validates their imports.
+#   - Power Lora Loader (rgthree)  -> the LoRA stack node in both workflows
+#   - ComfyUI-Krea2T-Enhancer      -> model patcher feeding both KSamplers (node 18)
+RUN git clone --depth 1 https://github.com/rgthree/rgthree-comfy /comfyui/custom_nodes/rgthree-comfy \
+ && git clone --depth 1 https://github.com/capitan01R/ComfyUI-Krea2T-Enhancer /comfyui/custom_nodes/ComfyUI-Krea2T-Enhancer
+
 # comfy-cli installs ComfyUI into its own workspace venv (/comfyui/.venv), but
 # start.sh launches ComfyUI with /opt/venv's python. That mismatch leaves the
 # launch venv missing ComfyUI's runtime deps (e.g. sqlalchemy, pulled in by
