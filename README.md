@@ -1,3 +1,36 @@
+# ⚠️ STOP. READ THIS BEFORE YOU DO ANYTHING. ⚠️
+
+**THIS IS NOT THE APP CODE.** There is no product code, no prompts, no business logic here.
+The actual application lives in the **private `AIGF` repo**. If you are looking for the app,
+close this tab.
+
+**What this repo actually is:** the Docker build context for the RunPod serverless ComfyUI
+worker image — `ghcr.io/bullseyelimited/aigf-comfyui-worker` (a customized
+[worker-comfyui](https://github.com/runpod-workers/worker-comfyui): cu128 torch pin, baked-in
+custom nodes). Pure infrastructure plumbing.
+
+**Why it is a separate, PUBLIC repo — on purpose (do not "fix" this):**
+
+1. **AGPL-3.0 license isolation.** This code is AGPL. AGPL requires publishing the source of
+   any modified version deployed as a network service. Keeping it as its own public repo
+   satisfies that obligation cleanly. Merging it into the private app repo would legally
+   attach the AGPL to everything it touches — i.e., risk being forced to open-source the
+   whole product. The wall between this repo and the app repo is a **legal firewall**.
+2. **Credential-free image pulls.** The GHCR image is public, so the RunPod endpoint pulls it
+   with zero registry auth. Making this private breaks worker cold-starts.
+3. **Nothing secret is allowed here.** No prompts, no workflow JSONs with prompt scaffolds,
+   no LoRA recipes, no `.env` values, no API keys — ever. It's public.
+
+**Rules for humans and AI agents alike:**
+
+- Do NOT put application code, prompts, or anything business-specific in this repo.
+- Do NOT make this repo private.
+- Do NOT rename the GHCR image tags in `.github/workflows/build-aigf.yml` to match the repo
+  name — the package name `aigf-comfyui-worker` is hardcoded on purpose; the RunPod endpoint
+  depends on it. The repo name and the image name intentionally differ.
+
+---
+
 # worker-comfyui
 
 > [ComfyUI](https://github.com/comfyanonymous/ComfyUI) as a serverless API on [RunPod](https://www.runpod.io/)

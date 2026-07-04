@@ -3,6 +3,18 @@
 
 ---
 
+## ⚠️ What this repo is (and is NOT) — read before touching anything
+
+This repo is ONLY the Docker build context for the RunPod serverless worker image
+(`ghcr.io/bullseyelimited/aigf-comfyui-worker`). It is NOT the application. The app lives in
+the private `AIGF` repo. It is deliberately a separate PUBLIC repo: (1) it's AGPL-3.0, and
+keeping it walled off stops the AGPL from attaching to the private product code; (2) a public
+GHCR image lets the RunPod endpoint pull without registry credentials. Therefore: never add
+app code, prompts, workflow JSONs with prompt content, or secrets here; never make the repo
+private; never change the hardcoded image tags in `.github/workflows/build-aigf.yml` to match
+the repo name — the package name is load-bearing (the RunPod endpoint pulls it), the repo name
+is intentionally not.
+
 ## Non-obvious constraints
 
 - **No hot-reload**: handler.py, start.sh, and network_volume.py are `ADD`ed into the Docker image at build time (to `/`). Any change requires a full `docker build` before testing with docker-compose.
