@@ -536,8 +536,8 @@ function gestureEnded(){
     if(row && wrap && wrap.contains(row)){
       e.stopPropagation();
       var a=row.getAttribute('data-pf');
-      if(a==='logout'){ window.location.href='Find Your Match.dc.html'; }
-      else if(a==='subscription'){ window.location.href='Pricing.dc.html'; }
+      if(a==='logout'){ window.location.href='index.html'; }
+      else if(a==='subscription'){ window.location.href='pricing.html'; }
       else { setOpen(false); }
       return;
     }
